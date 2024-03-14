@@ -1,9 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Example</title>
-    </head>
-    <body>
-        <p>This is an example of a simple HTML page with one paragraph.</p>
-    </body>
+<head>
+    <title>Video Upload</title>
+</head>
+<body>
+    <h2>Upload Video</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="videoFile" accept="video/*">
+        <button type="submit">Upload</button>
+    </form>
+    <! -- test -->
+    <div id="message"></div>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('videoFile', event.target.videoFile.files[0]);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                document.getElementById('message').innerText = data.message;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
 </html>
